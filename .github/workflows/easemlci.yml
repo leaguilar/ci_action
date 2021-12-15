@@ -14,17 +14,15 @@ env:
     CI: true
     TERM: xterm
 jobs:
-    display_changes:
+    easeml_ci:
         runs-on: ubuntu-latest
         steps:
             - name: Install Prerequisites
               run: |
                 echo "Initializing the software environment"
-                apt update
-                apt install -y build-essential python3-dev libssl-dev libffi-dev
-                apt install -y ca-certificates curl gnupg lsb-release
-
-                ####
+                sudo apt update
+                sudo apt install -y build-essential python3-dev libssl-dev libffi-dev
+                sudo apt install -y ca-certificates curl gnupg lsb-release
                 echo "Installing docker"
                 echo "Adding docker gpg key"
                 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
@@ -36,6 +34,15 @@ jobs:
                 sudo apt install -y docker-ce docker-ce-cli containerd.io
                 echo "Testing Docker"
                 sudo docker run hello-world
+                echo "Enabling non sudo use of docker"
+                sudo groupadd docker
+                sudo usermod -aG docker $USER
+                newgrp docker 
+                echo "Testing docker"
+                docker run hello-world
             - name: Check out code
               uses: actions/checkout@v1
+            - name: Test
+              run: |
+                docker run hello-world
 
