@@ -52,8 +52,8 @@ jobs:
             - name: Run CI Test
               run: |
                 # Set identity for commits
-                git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
-                git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
+                git config --global user.name ${GITHUB_ACTOR}
+                git config --global user.email ${GITHUB_ACTOR}@email
                 
                 # Calling the ci runner
                 easeml_cicd_runner ${GITHUB_ACTOR} ${{ secrets.GITHUB_TOKEN }} ${GITHUB_REPOSITORY} ${GITHUB_SHA} ${GITHUB_REF_NAME} -g
