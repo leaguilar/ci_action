@@ -21,6 +21,7 @@ jobs:
               run: |
                 echo "Initializing the software prerequisites"
                 sudo apt update
+                sudo apt install -y jq
                 sudo apt install -y build-essential python3-dev libssl-dev libffi-dev
                 sudo apt install -y ca-certificates curl gnupg lsb-release
                 echo "Installing docker"
@@ -44,17 +45,18 @@ jobs:
                 
                 echo "Adding decryption and encryption keys"
                 mkdir -p $HOME/.easeml/keys
-
-
-            - name: Check out code
-              uses: actions/checkout@v1
-            - name: Test
-              run: |
+                
                 git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
                 git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
                 echo ${{ secrets.B64_EASEML_PRIV }} | base64 -d > $HOME/.easeml/keys/easeml_priv.asc
                 echo ${{ secrets.B64_EASEML_PUB }} | base64 -d > $HOME/.easeml/keys/easeml_pub.asc
-                
+
+            - name: Run CI Test
+              run: |               
                 # Calling the ci runner
                 easeml_cicd_runner ${GITHUB_ACTOR} ${{ secrets.GITHUB_TOKEN }} ${GITHUB_REPOSITORY} ${GITHUB_SHA} ${GITHUB_REF_NAME} -g
 
+            - name: Eval CI Test
+              run: |
+                echo "HELLO"
+                jq -r '.name'
