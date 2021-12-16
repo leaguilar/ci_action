@@ -19,7 +19,7 @@ jobs:
         steps:
             - name: Install Prerequisites
               run: |
-                echo "Initializing the software environment"
+                echo "Initializing the software prerequisites"
                 sudo apt update
                 sudo apt install -y build-essential python3-dev libssl-dev libffi-dev
                 sudo apt install -y ca-certificates curl gnupg lsb-release
@@ -36,13 +36,21 @@ jobs:
                 sudo docker run hello-world
                 echo "Enabling non sudo use of docker"
                 sudo usermod -aG docker $USER
-                newgrp docker 
-                echo "Testing docker"
-                docker run hello-world
+                newgrp docker
+                
+                # Installing keys
+                mkdir -p $HOME/.easeml/keys
+                echo $EASEML_PRIV_FILE > $HOME/.easeml/keys/easeml_priv.asc
+                echo $EASEML_PUB_FILE > $HOME/.easeml/keys/easeml_pub.asc
+              env:
+                EASEML_PRIV_FILE : ${{secrets.EASEML_PRIV}}
+                EASEML_PUB_FILE : ${{secrets.EASEML_PUB}}
+                
+                echo "Installing Easeml/CI" 
+                pip install git+https://github.com/easeml/ci.git@feature/actions
             - name: Check out code
               uses: actions/checkout@v1
             - name: Test
               run: |
-                printenv
-                docker run hello-world
+                easeml_cicd_runner ${GITHUB_ACTOR} ${GITHUB_TOKEN} ${GITHUB_REPOSITORY} ${GITHUB_SHA} ${GITHUB_REF_NAME} -g
 
