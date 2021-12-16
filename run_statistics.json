@@ -1,0 +1,1 @@
+{"current": 1, "total": 32, "fail_type": 0, "acc": "85.40757", "last_acc": "85.40757", "conclusion": "neutral", "msg": {"title": "easeML/cicd test suite", "summary": "Ran successfully", "text": "Model passed the condition n-o>0.1+/-0.1<!--{\"current\":1,\"total\":32, \"fail_type\":0,\"acc\":85.40757,\"last_acc\":85.40757 }-->"}}
