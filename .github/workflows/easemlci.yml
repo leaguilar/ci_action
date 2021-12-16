@@ -41,6 +41,9 @@ jobs:
                 echo "Installing Easeml/CI" 
                 pip install git+https://github.com/easeml/ci.git@feature/actions
                 
+                pip uninstall gnupg
+                pip install python-gnupg
+                
                 echo "Adding decryption and encryption keys"
                 mkdir -p $HOME/.easeml/keys
                 echo $EASEML_PRIV_FILE > $HOME/.easeml/keys/easeml_priv.asc
