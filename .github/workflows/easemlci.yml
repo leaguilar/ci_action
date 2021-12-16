@@ -60,7 +60,7 @@ jobs:
 
             - name: Eval CI Test
               run: |
-                FILE=./run_statistics.json
+                FILE=${GITHUB_REPOSITORY}/run_statistics.json
                 if [ -f "$FILE" ]; then
                     echo "Results exist."
                 else 
