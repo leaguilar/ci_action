@@ -32,8 +32,6 @@ jobs:
                 sudo apt update
                 echo "Installing Docker engine"
                 sudo apt install -y docker-ce docker-ce-cli containerd.io
-                echo "Testing Docker"
-                sudo docker run hello-world
                 echo "Enabling non sudo use of docker"
                 sudo usermod -aG docker $USER
                 newgrp docker
@@ -46,14 +44,16 @@ jobs:
                 
                 echo "Adding decryption and encryption keys"
                 mkdir -p $HOME/.easeml/keys
-                echo $EASEML_PRIV_FILE > $HOME/.easeml/keys/easeml_priv.asc
-                echo $EASEML_PUB_FILE > $HOME/.easeml/keys/easeml_pub.asc
-              env:
-                EASEML_PRIV_FILE : ${{secrets.EASEML_PRIV}}
-                EASEML_PUB_FILE : ${{secrets.EASEML_PUB}}
+
+
             - name: Check out code
               uses: actions/checkout@v1
             - name: Test
               run: |
+                echo $EASEML_PRIV_FILE > $HOME/.easeml/keys/easeml_priv.asc
+                echo $EASEML_PUB_FILE > $HOME/.easeml/keys/easeml_pub.asc
                 easeml_cicd_runner ${GITHUB_ACTOR} ${{ secrets.GITHUB_TOKEN }} ${GITHUB_REPOSITORY} ${GITHUB_SHA} ${GITHUB_REF_NAME} -g
+              env:
+                EASEML_PRIV_FILE : ${{secrets.EASEML_PRIV}}
+                EASEML_PUB_FILE : ${{secrets.EASEML_PUB}}
 
