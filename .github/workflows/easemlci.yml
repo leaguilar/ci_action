@@ -50,10 +50,7 @@ jobs:
               uses: actions/checkout@v1
             - name: Test
               run: |
-                echo $EASEML_PRIV_FILE > $HOME/.easeml/keys/easeml_priv.asc
-                echo $EASEML_PUB_FILE > $HOME/.easeml/keys/easeml_pub.asc
+                echo ${{ secrets.B64_EASEML_PRIV }} | base64 -d > $HOME/.easeml/keys/easeml_priv.asc
+                echo ${{ secrets.B64_EASEML_PUB }} | base64 -d > $HOME/.easeml/keys/easeml_pub.asc
                 easeml_cicd_runner ${GITHUB_ACTOR} ${{ secrets.GITHUB_TOKEN }} ${GITHUB_REPOSITORY} ${GITHUB_SHA} ${GITHUB_REF_NAME} -g
-              env:
-                EASEML_PRIV_FILE : ${{secrets.EASEML_PRIV}}
-                EASEML_PUB_FILE : ${{secrets.EASEML_PUB}}
 
