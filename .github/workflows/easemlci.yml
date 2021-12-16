@@ -63,13 +63,17 @@ jobs:
                 FILE=${GITHUB_REPOSITORY}/run_statistics.json
                 if [ -f "$FILE" ]; then
                     echo "Results exist."
+                    echo "::notice ::Results Exists"
                 else 
                     echo "Unable to find test results."
+                    echo "::error ::Unable to find test results."
                     exit 1
                 fi
                 if [ $(jq .fail_type $FILE) -eq "0" ]; then
                    echo "Your model passed";
+                   echo "::notice ::Your model passed"
                 else
-                   echo "Your model failed";
+                   echo "Your model did not pass";
+                   echo "::error ::Your model did not pass"
                    exit 1
                 fi
