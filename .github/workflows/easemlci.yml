@@ -38,16 +38,16 @@ jobs:
                 sudo usermod -aG docker $USER
                 newgrp docker
                 
-                # Installing keys
+                echo "Installing Easeml/CI" 
+                pip install git+https://github.com/easeml/ci.git@feature/actions
+                
+                echo "Adding decryption and encryption keys"
                 mkdir -p $HOME/.easeml/keys
                 echo $EASEML_PRIV_FILE > $HOME/.easeml/keys/easeml_priv.asc
                 echo $EASEML_PUB_FILE > $HOME/.easeml/keys/easeml_pub.asc
               env:
                 EASEML_PRIV_FILE : ${{secrets.EASEML_PRIV}}
                 EASEML_PUB_FILE : ${{secrets.EASEML_PUB}}
-                
-                echo "Installing Easeml/CI" 
-                pip install git+https://github.com/easeml/ci.git@feature/actions
             - name: Check out code
               uses: actions/checkout@v1
             - name: Test
